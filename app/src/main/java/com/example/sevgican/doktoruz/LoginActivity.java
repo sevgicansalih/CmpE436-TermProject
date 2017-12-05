@@ -56,13 +56,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -73,7 +67,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
+    private View mImageView;
+    public static final String EXTRA_MESSAGE = "com.example.sevgican.MESSAGE";
+    public static final String HOST_IP = "192.168.5.50";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
+        mImageView = (View) findViewById(R.id.image_login);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -112,12 +108,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-    public static final String EXTRA_MESSAGE = "com.example.sevgican.MESSAGE";
     private void sendMessage() {
         Intent intent = new Intent(this,RegisterActivity.class);
-        EditText editText = (EditText) findViewById(R.id.email);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE,message);
+        //EditText editText = (EditText) findViewById(R.id.email);
+        //String username = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE,"Enter your username and password");
         startActivity(intent);
     }
 
@@ -318,22 +313,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
-
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
@@ -355,10 +334,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
             Log.e("Login Activity","async calisti aga");
             //skip here for now
-            /*try {
+            try {
                 Log.e("Login Activity","socket baglanamadi sanki ???");
 
-                Socket clientSocket = new Socket("192.168.90.24", 50000);
+                Socket clientSocket = new Socket(HOST_IP, 50000);
 
                 Log.e("Login Activity","Socket baglandi.");
 
@@ -381,6 +360,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //System.out.println("From Server : "+result.getString("password"));
                 boolean bool = result.getString("password").equals(mPassword);
                 Log.e("Login Activity","Result alindi.");
+                outToServer.writeBytes("CLOSE" + "\n");
 
                 clientSocket.close();
 
@@ -393,8 +373,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 e.printStackTrace();
                 return false;
-            }*/
-            return true;
+            }
+            //return true;
             // TODO: register the new account here.
 
         }
@@ -426,6 +406,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+
 
     private void sendMessageToMain() {
         Intent intent = new Intent(this,MainActivity.class);
