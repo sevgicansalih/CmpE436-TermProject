@@ -354,11 +354,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             Log.e("Login Activity","async calisti aga");
-
-            try {
+            //skip here for now
+            /*try {
                 Log.e("Login Activity","socket baglanamadi sanki ???");
 
-                Socket clientSocket = new Socket("192.168.4.67", 50000);
+                Socket clientSocket = new Socket("192.168.90.24", 50000);
 
                 Log.e("Login Activity","Socket baglandi.");
 
@@ -393,8 +393,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 e.printStackTrace();
                 return false;
-            }
-
+            }*/
+            return true;
             // TODO: register the new account here.
 
         }
@@ -405,7 +405,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Log.e("Login Activity","BOOLEAN SUCCESS OLCAK");
 
             showProgress(false);
-
+            //ifin icinde success olcak
             if (success) {
                 // new activity
                 Log.e("Login Activity","Success new activity geldi");
