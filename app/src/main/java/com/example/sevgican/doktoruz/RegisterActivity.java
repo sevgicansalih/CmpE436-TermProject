@@ -21,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mSignupFormView;
+    private TextView mTextView;
     private UserSignupTask mAuthTask = null;
 
     @Override
@@ -32,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.password_signup);
         mSignupFormView = (View) findViewById(R.id.signup_form);
         mProgressView = (View) findViewById(R.id.signup_progress);
+        mTextView = (TextView) findViewById(R.id.textView2);
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
         TextView textView = findViewById(R.id.textView2);
@@ -135,6 +137,14 @@ public class RegisterActivity extends AppCompatActivity {
                     mSignupFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
+            mTextView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mTextView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mTextView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
@@ -149,6 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mSignupFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mTextView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

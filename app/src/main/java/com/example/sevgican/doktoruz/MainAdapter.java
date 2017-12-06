@@ -41,14 +41,18 @@ class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             Log.e("Main Adapter","itemleri cekiyorum");
 
             item = mUserData.getJSONObject(position).getString("hospitalname");
+            item += "\nCity:";
+            item += mUserData.getJSONObject(position).getString("cityname");
+            item += "\nCapacity";
+            item += mUserData.getJSONObject(position).getString("capacity");
             holder.mFirstName.setText(item);
             holder.mFirstName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), RegisterActivity.class);
+                    Intent intent = new Intent(view.getContext(), Main2Activity.class);
                     String message = null;
                     try {
-                        message = mUserData.getJSONObject(position).getString("hospitalname");
+                        message = mUserData.getJSONObject(position).getString("hospitalid");
                     } catch (JSONException e) {
                         Log.e("Main Adapter", String.valueOf(e));
                     }
