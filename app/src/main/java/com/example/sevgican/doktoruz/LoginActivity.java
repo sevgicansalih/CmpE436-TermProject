@@ -399,7 +399,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 // new activity
                 Log.e("Login Activity","Success new activity geldi");
-
                 sendMessageToMain();
                 Log.e("Login Activity","activity gecti ve finish olcak.");
 

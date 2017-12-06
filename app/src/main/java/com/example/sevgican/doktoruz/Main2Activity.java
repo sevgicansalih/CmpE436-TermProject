@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -51,6 +52,7 @@ public class Main2Activity extends AppCompatActivity {
         String modifiedSentence;
         JSONArray temp;
         JSONArray temp2;
+        String name;
 
         JSONObject result;
 
@@ -86,7 +88,7 @@ public class Main2Activity extends AppCompatActivity {
 
                 Log.e("Main2 Activity","json geldi.");
 
-                mTextView.setText(temp.getJSONObject(0).getString("hospitalname"));
+                name = temp.getJSONObject(0).getString("hospitalname");
 
                 sentence = "SELECT username FROM userselection WHERE hospitalid=\""+mHospitalid+"\"";
 
@@ -103,33 +105,7 @@ public class Main2Activity extends AppCompatActivity {
                 outToServer.writeBytes("CLOSE" + "\n");
                 outToServer.flush();
 
-                /*
-                int size = temp.length();
-                sentence = "SELECT * FROM hospitals WHERE hospitalid=";
-                for (int i = 0; i <size ; i++) {
-                    sentence+=temp.getJSONObject(i).getInt("hospitalid");
-                    if(i!=(size-1)){
-                        sentence+=" OR hospitalid=";
-                    }
-                }
-                Log.e("Main2 Activity",sentence);
 
-                outToServer.writeBytes(sentence + "\n");
-                Log.e("Main2 Activity","ikinci kez out to server "+sentence);
-
-                modifiedSentence = inFromServer.readLine();
-                Log.e("Main2 Activity","ikinci kez read ettim anam.");
-                outToServer.writeBytes("CLOSE" + "\n");
-
-                temp2 = new JSONArray(modifiedSentence);
-                //System.out.println(temp.toString());
-                //result = temp2.getJSONObject(0);
-
-                //System.out.println("object ==> "+result.toString());
-                //System.out.println("From Server : "+result.getString("password"));
-                //boolean bool = result.getString("password").equals(mPassword);
-                Log.e("Main2 Activity","Result alindi.");
-                */
                 clientSocket.close();
 
                 return temp2;
@@ -139,6 +115,7 @@ public class Main2Activity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e("Main2 Activity","belki burda kucuk tatli bir exception vardir");
                 Log.e("Main2 Activity", String.valueOf(e));
+                e.printStackTrace();
                 return null;
             }
             //return true;
@@ -152,7 +129,7 @@ public class Main2Activity extends AppCompatActivity {
         protected void onPostExecute(final JSONArray jar) {
             mGetHospitalData = null;
             Log.e("Main2 Activity","post execute girdim");
-
+            setText(name);
 
             //ifin icinde success olcak
             if (jar!=null) {
@@ -175,5 +152,14 @@ public class Main2Activity extends AppCompatActivity {
             mGetHospitalData = null;
             //showProgress(false);
         }
+    }
+
+    private void setText(String name) {
+        try {
+            mTextView.setText(name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

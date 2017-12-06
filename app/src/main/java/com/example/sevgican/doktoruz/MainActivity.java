@@ -8,7 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -20,11 +22,12 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
+    GetUserData mGetUserData;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
+    private ImageView mImageView;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    GetUserData mGetUserData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,14 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mImageView = (ImageView) findViewById(R.id.plusButton);
+        mImageView.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+            }
+        });
         Intent intent = getIntent();
         String username = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
 
@@ -40,9 +50,19 @@ public class MainActivity extends AppCompatActivity {
         mGetUserData.execute();
 
     }
-    public void setAdp(){
+
+    private void sendMessage() {
+        Intent intent = new Intent(this, HospitalsActivity.class);
+        //EditText editText = (EditText) findViewById(R.id.email);
+        //String username = editText.getText().toString();
+        intent.putExtra(LoginActivity.EXTRA_MESSAGE, "Select an hospital that you want to view");
+        startActivity(intent);
+    }
+
+    public void setAdp() {
         mRecyclerView.setAdapter(mAdapter);
     }
+
     public class GetUserData extends AsyncTask<String, Void, JSONArray> {
 
         private final String mUserName;
@@ -54,70 +74,75 @@ public class MainActivity extends AppCompatActivity {
         JSONObject result;
 
         public GetUserData(String username) {
-            mUserName=username;
+            mUserName = username;
         }
 
         @Override
         protected JSONArray doInBackground(String... username) {
             // TODO: attempt authentication against a network service.
-            Log.e("Main Activity","async calisti aga");
+            Log.e("Main Activity", "async calisti aga");
             //skip here for now
             try {
-                Log.e("Main Activity","socket baglanamadi sanki ???");
+                Log.e("Main Activity", "socket baglanamadi sanki ???");
 
                 Socket clientSocket = new Socket(LoginActivity.HOST_IP, 50000);
 
-                Log.e("Main Activity","Socket baglandi.");
+                Log.e("Main Activity", "Socket baglandi.");
 
                 DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
                 BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                sentence = "SELECT hospitalid FROM userselection WHERE username=\""+mUserName+"\"";
+                sentence = "SELECT hospitalid FROM userselection WHERE username=\"" + mUserName + "\"";
 
                 outToServer.writeBytes(sentence + "\n");
 
-                Log.e("Main Activity","out to server oldu");
+                Log.e("Main Activity", "out to server oldu");
 
                 modifiedSentence = inFromServer.readLine();
 
-                Log.e("Main Activity","json geldi.");
+                Log.e("Main Activity", "json geldi.");
 
                 temp = new JSONArray(modifiedSentence);
                 int size = temp.length();
-                sentence = "SELECT * FROM hospitals WHERE hospitalid=";
-                for (int i = 0; i <size ; i++) {
-                    sentence+=temp.getJSONObject(i).getInt("hospitalid");
-                    if(i!=(size-1)){
-                        sentence+=" OR hospitalid=";
+                if (size != 0) {
+                    sentence = "SELECT * FROM hospitals WHERE hospitalid=";
+                    for (int i = 0; i < size; i++) {
+                        sentence += temp.getJSONObject(i).getInt("hospitalid");
+                        if (i != (size - 1)) {
+                            sentence += " OR hospitalid=";
+                        }
                     }
+                    Log.e("Main Activity", sentence);
+
+                    outToServer.writeBytes(sentence + "\n");
+                    Log.e("Main Activity", "ikinci kez out to server " + sentence);
+
+                    modifiedSentence = inFromServer.readLine();
+                    Log.e("Main Activity", "ikinci kez read ettim anam.");
+                    outToServer.writeBytes("CLOSE" + "\n");
+
+                    temp2 = new JSONArray(modifiedSentence);
+                }else{
+                    outToServer.writeBytes("CLOSE" + "\n");
+                    return null;
                 }
-                Log.e("Main Activity",sentence);
 
-                outToServer.writeBytes(sentence + "\n");
-                Log.e("Main Activity","ikinci kez out to server "+sentence);
-
-                modifiedSentence = inFromServer.readLine();
-                Log.e("Main Activity","ikinci kez read ettim anam.");
-                outToServer.writeBytes("CLOSE" + "\n");
-
-                temp2 = new JSONArray(modifiedSentence);
                 //System.out.println(temp.toString());
                 //result = temp2.getJSONObject(0);
 
                 //System.out.println("object ==> "+result.toString());
                 //System.out.println("From Server : "+result.getString("password"));
                 //boolean bool = result.getString("password").equals(mPassword);
-                Log.e("Main Activity","Result alindi.");
+                Log.e("Main Activity", "Result alindi.");
 
                 clientSocket.close();
 
                 return temp2;
 
 
-
             } catch (Exception e) {
-                Log.e("Main Activity","belki burda kucuk tatli bir exception vardir");
+                Log.e("Main Activity", "belki burda kucuk tatli bir exception vardir");
                 Log.e("Main Activity", String.valueOf(e));
                 return null;
             }
@@ -127,17 +152,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         @Override
         protected void onPostExecute(final JSONArray jar) {
             mGetUserData = null;
-            Log.e("Main Activity","post execute girdim");
+            Log.e("Main Activity", "post execute girdim");
 
 
             //ifin icinde success olcak
-            if (jar!=null) {
+            if (jar != null) {
                 // new activity
-                Log.e("Main Activity","adapter set ettim");
+                Log.e("Main Activity", "adapter set ettim");
 
                 mAdapter = new MainAdapter(jar);
                 setAdp();
@@ -145,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 //mPasswordView.setError(getString(R.string.error_incorrect_password));
                 //mPasswordView.requestFocus();
-                Log.e("Main activity","buralar hep dutluktu");
+                Log.e("Main activity", "buralar hep dutluktu");
 
             }
         }

@@ -1,6 +1,5 @@
 package com.example.sevgican.doktoruz;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,46 +14,46 @@ import org.json.JSONException;
 import static com.example.sevgican.doktoruz.LoginActivity.EXTRA_MESSAGE;
 
 /**
- * Created by sevgican on 05.12.2017.
+ * Created by sevgican on 06.12.2017.
  */
 
-class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
-    JSONArray mUserData;
-    String item="";
+class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHolder> {
+    JSONArray mHospitalData;
+    String item = "";
 
-    public MainAdapter(JSONArray jar) {
-        mUserData = jar;
+    public HospitalAdapter(JSONArray jar) {
+        mHospitalData = jar;
     }
 
     @Override
-    public MainAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row3, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MainAdapter.ViewHolder holder, final int position) {
-
+    public void onBindViewHolder(HospitalAdapter.ViewHolder holder, final int position) {
         try {
-            Log.e("Main Adapter","itemleri cekiyorum");
+            Log.e("Hospital Adapter","itemleri cekiyorum");
 
-            item = mUserData.getJSONObject(position).getString("hospitalname");
+            item = mHospitalData.getJSONObject(position).getString("hospitalname");
             item += "\nCity: ";
-            item += mUserData.getJSONObject(position).getString("cityname");
+            item += mHospitalData.getJSONObject(position).getString("cityname");
             item += "\nCapacity: ";
-            item += mUserData.getJSONObject(position).getString("capacity");
+            item += mHospitalData.getJSONObject(position).getString("capacity");
+
             holder.mFirstName.setText(item);
+
             holder.mFirstName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), Main2Activity.class);
                     String message = null;
                     try {
-                        message = mUserData.getJSONObject(position).getString("hospitalid");
+                        message = mHospitalData.getJSONObject(position).getString("hospitalid");
                     } catch (JSONException e) {
-                        Log.e("Main Adapter", String.valueOf(e));
+                        Log.e("Hospital Adapter", String.valueOf(e));
                     }
                     intent.putExtra(EXTRA_MESSAGE, message);
                     view.getContext().startActivity(intent);
@@ -63,21 +62,23 @@ class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         } catch (Exception e) {
             Log.e("Main Adapter", "Json object get edilmiyor.");
         }
-
     }
+
+
+
 
     @Override
     public int getItemCount() {
-        return mUserData.length();
+        return mHospitalData.length();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mFirstName;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            mFirstName = (TextView) itemView.findViewById(R.id.first_name);
+        public ViewHolder(View view) {
+            super(view);
+            mFirstName = (TextView) view.findViewById(R.id.hospital_name);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.sevgican.doktoruz;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,6 +16,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.Socket;
 
 public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mUsernameView;
@@ -52,20 +62,20 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean isUsernameValid(String username) {
         //TODO: Replace this with your own logic
         //return email.contains("@");
-        return true;
+        return username.length() > 3;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         //return password.length() > 4;
-        return true;
+        return password.length() > 0;
     }
 
     private void attemptSignup() {
         if (mAuthTask != null) {
             return;
         }
-        Log.e("Login Activity", "ATTEMPT LOGIN STARTS!!!");
+        Log.e("Signup Activity", "ATTEMPT SIGNUP STARTS!!!");
 
         // Reset errors.
         mUsernameView.setError(null);
@@ -94,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             focusView = mUsernameView;
             cancel = true;
-        } else if (!isUsernameValid(username) ){
+        } else if (!isUsernameValid(username)) {
             Log.e("Signup Activity", "username valid degil");
 
             mUsernameView.setError(getString(R.string.error_invalid_username));
@@ -118,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
             mAuthTask.execute((Void) null);
         }
     }
+
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -164,17 +175,84 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private class UserSignupTask extends AsyncTask<Void, Void, Boolean> {
-        String mUsername="";
-        String mPassword="";
+        String mUsername = "";
+        String mPassword = "";
+
+
+        String sentence;
+        String modifiedSentence;
+        JSONArray temp;
+        JSONObject result;
 
         public UserSignupTask(String username, String password) {
-            mUsername=username;
-            mPassword=password;
+            mUsername = username;
+            mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            return null;
+
+            Log.e("Signup Activity", "async calisti aga");
+            //skip here for now
+            try {
+                Log.e("Signup Activity", "socket baglanamadi sanki ???");
+
+                Socket clientSocket = new Socket(LoginActivity.HOST_IP, 50000);
+
+                Log.e("Signup Activity", "Socket baglandi.");
+
+                DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+
+                BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+                sentence = "INSERT INTO users (username,password) VALUES (\"" + mUsername + "\",\"" + mPassword + "\")";
+
+                outToServer.writeBytes(sentence + "\n");
+                Log.e("Signup Activity", "out to server oldu");
+
+                //boolean bool = result.getString("password").equals(mPassword);
+
+                outToServer.writeBytes("CLOSE" + "\n");
+
+                clientSocket.close();
+
+                return true;
+
+
+            } catch (Exception e) {
+                Log.e("Signup Activity", "belki burda kucuk tatli bir exception vardir");
+
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            Log.e("Signup Activity","BOOLEAN SUCCESS OLCAK");
+
+            showProgress(false);
+            //ifin icinde success olcak
+            if (success) {
+                // new activity
+                Log.e("Signup Activity","Tebrikler is bitti");
+                Context context = getApplicationContext();
+                CharSequence text = "Register Succesfull!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast.makeText(context, text, duration).show();
+                finish();
+            } else {
+                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
         }
     }
 }
