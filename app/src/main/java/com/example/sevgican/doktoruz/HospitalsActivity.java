@@ -15,6 +15,8 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import static com.example.sevgican.doktoruz.Constants.*;
+
 public class HospitalsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -33,6 +35,13 @@ public class HospitalsActivity extends AppCompatActivity {
         mGetAllHospitals = new GetAllHospitals();
         mGetAllHospitals.execute();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGetAllHospitals = new GetAllHospitals();
+        mGetAllHospitals.execute();
+    }
+
     public void setAdp(){
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -50,7 +59,7 @@ public class HospitalsActivity extends AppCompatActivity {
             try {
                 Log.e("Hospitals Activity","socket baglanamadi sanki ???");
 
-                Socket clientSocket = new Socket(LoginActivity.HOST_IP, 50000);
+                Socket clientSocket = new Socket(HOST_IP, 50000);
 
                 Log.e("Hospitals Activity","Socket baglandi.");
 

@@ -69,7 +69,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private View mImageView;
     public static final String EXTRA_MESSAGE = "com.example.sevgican.MESSAGE";
-    public static final String HOST_IP = "192.168.4.203";
+    public static final String EXTRA_MESSAGE2 = "com.example.sevgican.MESSAGE";
+    public static final String HOST_IP = Constants.HOST_IP;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -21,12 +21,16 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import static com.example.sevgican.doktoruz.Constants.*;
+import static com.example.sevgican.doktoruz.Constants.username;
+
 public class MainActivity extends AppCompatActivity {
     GetUserData mGetUserData;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private ImageView mImageView;
     private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +48,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Intent intent = getIntent();
-        String username = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+        username = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
 
         mGetUserData = new GetUserData(username);
         mGetUserData.execute();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGetUserData = new GetUserData(username);
+        mGetUserData.execute();
     }
 
     private void sendMessage() {
@@ -85,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Log.e("Main Activity", "socket baglanamadi sanki ???");
 
-                Socket clientSocket = new Socket(LoginActivity.HOST_IP, 50000);
+                Socket clientSocket = new Socket(HOST_IP, 50000);
 
                 Log.e("Main Activity", "Socket baglandi.");
 
@@ -123,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     outToServer.writeBytes("CLOSE" + "\n");
 
                     temp2 = new JSONArray(modifiedSentence);
-                }else{
+                } else {
                     outToServer.writeBytes("CLOSE" + "\n");
                     return null;
                 }
@@ -144,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e("Main Activity", "belki burda kucuk tatli bir exception vardir");
                 Log.e("Main Activity", String.valueOf(e));
+                e.printStackTrace();
                 return null;
             }
             //return true;
@@ -169,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 //mPasswordView.setError(getString(R.string.error_incorrect_password));
                 //mPasswordView.requestFocus();
-                Log.e("Main activity", "buralar hep dutluktu");
+                Log.e("Main activity", "sikinti var abi");
 
             }
         }

@@ -54,6 +54,8 @@ class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHolder> {
                         message = mHospitalData.getJSONObject(position).getString("hospitalid");
                     } catch (JSONException e) {
                         Log.e("Hospital Adapter", String.valueOf(e));
+                        e.printStackTrace();
+
                     }
                     intent.putExtra(EXTRA_MESSAGE, message);
                     view.getContext().startActivity(intent);

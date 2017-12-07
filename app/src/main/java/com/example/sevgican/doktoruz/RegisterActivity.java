@@ -26,6 +26,8 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import static com.example.sevgican.doktoruz.Constants.*;
+
 public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
@@ -197,7 +199,7 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 Log.e("Signup Activity", "socket baglanamadi sanki ???");
 
-                Socket clientSocket = new Socket(LoginActivity.HOST_IP, 50000);
+                Socket clientSocket = new Socket(HOST_IP, 50000);
 
                 Log.e("Signup Activity", "Socket baglandi.");
 

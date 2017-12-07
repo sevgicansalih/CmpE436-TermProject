@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import static com.example.sevgican.doktoruz.Constants.username;
 import static com.example.sevgican.doktoruz.LoginActivity.EXTRA_MESSAGE;
 
 /**
@@ -20,9 +22,13 @@ import static com.example.sevgican.doktoruz.LoginActivity.EXTRA_MESSAGE;
 class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.ViewHolder> {
     JSONArray mHospitalData;
     String item = "";
+    ImageView addIconView;
+    ImageView deleteIconView;
 
-    public Main2Adapter(JSONArray jar) {
+    public Main2Adapter(JSONArray jar, ImageView addIconView, ImageView deleteIconView) {
         mHospitalData = jar;
+        this.addIconView = addIconView;
+        this.deleteIconView = deleteIconView;
     }
 
     @Override
@@ -37,14 +43,31 @@ class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.ViewHolder> {
     public void onBindViewHolder(Main2Adapter.ViewHolder holder, final int position) {
 
         try {
-            if (getItemCount() == 0) {
+            if (mHospitalData.length()==0) {
+                Log.e("Main2 Adapter","item count 0");
                 item = "No user Registered to this hospital";
+                holder.mFirstName.setText(item);
+                addIconView.setVisibility(View.VISIBLE);
+                deleteIconView.setVisibility(View.GONE);
+
             } else {
                 Log.e("Main2 Adapter", "itemleri cekiyorum");
-                item = "Registered User # " + (position+1)+" :";
+                item = "Registered User # " + (position + 1) + " :";
                 item += mHospitalData.getJSONObject(position).getString("username");
+                if (mHospitalData.length() > 0) {
+                    if (mHospitalData.getJSONObject(position).getString("username").equals(username)) {
+                        addIconView.setVisibility(View.GONE);
+                        deleteIconView.setVisibility(View.VISIBLE);
+                    } else {
+                        addIconView.setVisibility(View.VISIBLE);
+                        deleteIconView.setVisibility(View.GONE);
+                    }
+                    holder.mFirstName.setText(item);
+                }else{
+                    addIconView.setVisibility(View.VISIBLE);
+                    deleteIconView.setVisibility(View.GONE);
+                }
 
-                holder.mFirstName.setText(item);
                 //------CLICK LISTENER VAR BURDA
                 /* holder.mFirstName.setOnClickListener(new View.OnClickListener() {
                     @Override

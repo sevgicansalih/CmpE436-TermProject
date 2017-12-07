@@ -27,14 +27,14 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="45dp"
         android:scaleType="fitXY"
-        android:src="@drawable/icon_plus" />
+        android:src="@drawable/add_icon" />
 
     <ImageView
         android:id="@+id/deleteButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom|right"
         android:layout_margin="45dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icon_plus" />
+        android:scaleType="fitXY"
+        android:src="@drawable/delete_icon" />
 </FrameLayout>

@@ -55,6 +55,7 @@ class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                         message = mUserData.getJSONObject(position).getString("hospitalid");
                     } catch (JSONException e) {
                         Log.e("Main Adapter", String.valueOf(e));
+                        e.printStackTrace();
                     }
                     intent.putExtra(EXTRA_MESSAGE, message);
                     view.getContext().startActivity(intent);
