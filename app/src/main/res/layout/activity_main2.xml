@@ -6,19 +6,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.sevgican.doktoruz.Main2Activity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/text_main2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorTurq"
+            android:gravity="center"
+            android:text="@string/registered_users"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/text_main2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical">
-    </android.support.v7.widget.RecyclerView>
 
     <ImageView
         android:id="@+id/addButton"

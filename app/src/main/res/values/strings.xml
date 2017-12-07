@@ -20,4 +20,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="your_registered_hospitals">Your registered hospitals</string>
+    <string name="registered_users">Registered Users</string>
+    <string name="all_hospitals">All hospitals</string>
 </resources>
