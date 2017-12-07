@@ -24,14 +24,18 @@ public class Server {
 	// Database credentials
 	static final String USER = "root";
 	static final String PASS = "135642";
-	static final String HOST_IP = "192.168.4.203";
-	
+	static final String HOST_IP = "192.168.4.49";
+	/*
+	 * mutex for database access
+	 */
 	static ReadWriteLock rw = new ReadWriteLock();
 	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("selam");
-	
+		/*
+		 * gets ip initializes welcome socket
+		 */
 		InetAddress addr = InetAddress.getByName(HOST_IP);
 
 		ServerSocket welcomeSocket = new ServerSocket(50000, 50, addr);
@@ -40,7 +44,9 @@ public class Server {
 		int id = 0;
 		while (true) {
 			System.out.println("tekrar bastayim.");
-
+			/*
+			 * When socket is accepted create a new Thread with reader and streamer, then turn back to while loop again
+			 */
 			Socket connectionSocket = welcomeSocket.accept();
 
 			System.out.println("socket accept");
@@ -52,8 +58,10 @@ public class Server {
 			id++;
 		}
 	}
-
-	public static synchronized JSONArray connectDB(String query) {
+	/*
+	 * Database connection, returns Json array after parsing Result set into JSON array
+	 */
+	public static JSONArray connectDB(String query) {
 		System.out.println("connection socket method begin");
 		Connection conn = null;
 		Statement stmt = null;
@@ -106,7 +114,9 @@ public class Server {
 		return js;
 
 	}
-
+	/*
+	 * Result set to Json array converter, called inside connectDB
+	 */
 	public static synchronized JSONArray convert(ResultSet rs) throws SQLException, JSONException {
 		JSONArray json = new JSONArray();
 		ResultSetMetaData rsmd = rs.getMetaData();

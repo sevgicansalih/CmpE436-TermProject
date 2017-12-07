@@ -23,7 +23,9 @@ public class MyThread extends Thread {
 	public void run() {
 		String clientSentence;
 		String outSentence;
-		
+		/*
+		 * Reads incoming data, if it is special char == CLOSE , finish off thread
+		 */
 		try {
 			String temp = inFromClient.readLine();
 			System.out.println("first query " + temp);
@@ -43,7 +45,10 @@ public class MyThread extends Thread {
 							break;
 				}
 				System.out.println("Line read");
-
+				/*
+				 * Checks for read or write query
+				 * Locks according to the query
+				 */
 				if (clientSentence.contains("INSERT") || clientSentence.contains("UPDATE")
 						|| clientSentence.contains("DELETE")) {
 					Server.rw.lockWrite();
