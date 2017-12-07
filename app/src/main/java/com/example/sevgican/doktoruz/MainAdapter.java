@@ -39,8 +39,11 @@ class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         try {
             Log.e("Main Adapter","itemleri cekiyorum");
-
             item = mUserData.getJSONObject(position).getString("hospitalname");
+            if(item.equals("###")){
+                holder.mFirstName.setText("You're not registered to any hospital");
+                return;
+            }
             item += "\nCity: ";
             item += mUserData.getJSONObject(position).getString("cityname");
             item += "\nCapacity: ";

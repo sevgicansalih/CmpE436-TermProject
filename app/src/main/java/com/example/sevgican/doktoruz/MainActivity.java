@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(final JSONArray jar) {
             mGetUserData = null;
             Log.e("Main Activity", "post execute girdim");
-
+            JSONArray tt=null;
 
             //ifin icinde success olcak
             if (jar != null) {
@@ -182,7 +183,14 @@ public class MainActivity extends AppCompatActivity {
                 //mPasswordView.setError(getString(R.string.error_incorrect_password));
                 //mPasswordView.requestFocus();
                 Log.e("Main activity", "sikinti var abi");
-
+                try {
+                    tt = new JSONArray("[{\"hospitalname\":\"###\"}]");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mAdapter = new MainAdapter(tt);
+                setAdp();
+                return;
             }
         }
 

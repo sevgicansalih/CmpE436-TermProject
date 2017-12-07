@@ -24,11 +24,13 @@ class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.ViewHolder> {
     String item = "";
     ImageView addIconView;
     ImageView deleteIconView;
+    Boolean bool;
 
     public Main2Adapter(JSONArray jar, ImageView addIconView, ImageView deleteIconView) {
         mHospitalData = jar;
         this.addIconView = addIconView;
         this.deleteIconView = deleteIconView;
+        bool = true;
     }
 
     @Override
@@ -53,14 +55,21 @@ class Main2Adapter extends RecyclerView.Adapter<Main2Adapter.ViewHolder> {
             } else {
                 Log.e("Main2 Adapter", "itemleri cekiyorum");
                 item = "Registered User # " + (position + 1) + " :";
-                item += mHospitalData.getJSONObject(position).getString("username");
+                String str = mHospitalData.getJSONObject(position).getString("username");
+                item += str;
+                Log.e("Main2 Adapter", "length : "+mHospitalData.length()+"username :"+username);
+
                 if (mHospitalData.length() > 0) {
-                    if (mHospitalData.getJSONObject(position).getString("username").equals(username)) {
-                        addIconView.setVisibility(View.GONE);
-                        deleteIconView.setVisibility(View.VISIBLE);
-                    } else {
-                        addIconView.setVisibility(View.VISIBLE);
-                        deleteIconView.setVisibility(View.GONE);
+                    //Log.e("Main2 Adapter", "boolean ? : "+mHospitalData.getJSONObject(position).getString("username").equals(username));
+                    if(bool) {
+                        if (mHospitalData.getJSONObject(position).getString("username").equals(username)) {
+                            addIconView.setVisibility(View.GONE);
+                            deleteIconView.setVisibility(View.VISIBLE);
+                            bool = false;
+                        } else {
+                            addIconView.setVisibility(View.VISIBLE);
+                            deleteIconView.setVisibility(View.GONE);
+                        }
                     }
                     holder.mFirstName.setText(item);
                 }else{

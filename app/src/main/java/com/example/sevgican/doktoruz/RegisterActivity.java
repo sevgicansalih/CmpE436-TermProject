@@ -206,7 +206,19 @@ public class RegisterActivity extends AppCompatActivity {
                 DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
                 BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                //-----------------------------------------//
+                sentence = "SELECT username FROM users WHERE username= (\"" + mUsername + "\")";
 
+                outToServer.writeBytes(sentence + "\n");
+
+                modifiedSentence = inFromServer.readLine();
+
+                JSONArray tmp = new JSONArray(modifiedSentence);
+                if(tmp != null){
+                    return false;
+                }
+
+                //---------------------------------------//
                 sentence = "INSERT INTO users (username,password) VALUES (\"" + mUsername + "\",\"" + mPassword + "\")";
 
                 outToServer.writeBytes(sentence + "\n");
@@ -246,8 +258,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(context, text, duration).show();
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                mUsernameView.setError(getString(R.string.error_invalid_username));
+                mUsernameView.requestFocus();
             }
         }
 

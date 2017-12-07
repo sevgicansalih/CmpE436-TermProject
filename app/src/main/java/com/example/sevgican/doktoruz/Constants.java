@@ -6,6 +6,6 @@ package com.example.sevgican.doktoruz;
 
 public class Constants {
     public static String username;
-    public static String HOST_IP="192.168.4.203";
+    public static String HOST_IP="192.168.4.49";
 
 }
